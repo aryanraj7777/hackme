@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAKANDA FOREVER | The Master Challenge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --wakanda-purple: #2e1065; 
+            --vibranium-glow: #a855f7;
+        }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #000; color: #fff; font-family: 'Outfit', sans-serif; }
+        
+        /* Layer Engine - Zero Scroll */
+        .layer {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s ease;
+            z-index: 1;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .layer.active { opacity: 1; z-index: 10; pointer-events: auto; transform: scale(1); }
+        .layer.prev { transform: translateY(-100%) rotateX(20deg); opacity: 0; }
+        .layer.next { transform: translateY(100%); }
+
+        /* Cinematic Backgrounds */
+        .bg-img {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.25) contrast(1.2) saturate(1.4);
+            z-index: -1;
+            transition: 2s ease-out;
+        }
+        .layer.active .bg-img { transform: scale(1.05); }
+
+        .glass-card { 
+            background: rgba(10, 2, 25, 0.9); 
+            backdrop-filter: blur(40px); 
+            border: 1px solid rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+            border-radius: 2rem;
+        }
+
+        .purple-glow { 
+            color: #f3e8ff;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 1), 0 0 40px rgba(168, 85, 247, 0.6); 
+        }
+
+        /* Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            right: 2.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .dot { 
+            width: 14px; height: 14px; border: 1.5px solid #a855f7; 
+            cursor: pointer; transition: 0.5s; transform: rotate(45deg);
+        }
+        .dot.active { background: #a855f7; box-shadow: 0 0 20px #a855f7; transform: rotate(45deg) scale(1.4); }
+
+        /* Progress Line */
+        .vibranium-bar {
+            position: fixed;
+            top: 0; left: 0; height: 3px;
+            background: linear-gradient(90deg, #4c1d95, #d8b4fe);
+            z-index: 1000;
+            transition: width 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 0 10px #a855f7;
+        }
+
+        /* Buttons */
+        .vibranium-btn {
+            background: linear-gradient(135deg, #4c1d95, #7e22ce);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .vibranium-btn:hover {
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+            transform: translateY(-3px);
+            filter: brightness(1.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="vibranium-bar" id="progress"></div>
+    
+    <div class="nav-dots">
+        <div class="dot active" onclick="jumpTo(0)"></div>
+        <div class="dot" onclick="jumpTo(1)"></div>
+        <div class="dot" onclick="jumpTo(2)"></div>
+        <div class="dot" onclick="jumpTo(3)"></div>
+        <div class="dot" onclick="jumpTo(4)"></div>
+        <div class="dot" onclick="jumpTo(5)"></div>
+    </div>
+
+    <div class="layer active" id="l0">
+        <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1974&auto=format&fit=crop')"></div>
+        <div class="text-center z-10 px-6">
+            <span class="text-purple-400 font-bold tracking-[0.8em] uppercase mb-4 block animate-pulse">Neural Uplink Established</span>
+            <h1 class="text-7xl md:text-9xl font-black mb-8 purple-glow tracking-tighter uppercase">Wakanda <br/> <span class="text-white italic">Forge.</span></h1>
+            <p class="text-xl text-gray-400 max-w-xl mx-auto mb-10 font-light">The Master Hackathon. Prove your genius to the Council.</p>
+            <button onclick="nextLayer()" class="vibranium-btn px-16 py-6 rounded-none font-black uppercase tracking-widest text-white border border-purple-400/50">Initiate Protocol</button>
+        </div>
+    </div>
+
+    <div class="layer next" id="l1">
+        <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2111&auto=format&fit=crop')"></div>
+        <div class="max-w-4xl px-8 glass-card p-16 text-center">
+            <h2 class="text-4xl font-bold mb-8 text-purple-400 uppercase tracking-widest">The Legend of the Craft</h2>
+            <p class="text-xl text-gray-200 leading-relaxed font-light italic">
+                "In Wakanda, we do not just use tools—we become them." This is a call to the architects of the new age. Your code is the Vibranium of the 21st century. We are searching for those who build with purpose, power, and soul.
+            </p>
+        </div>
+    </div>
+
+    <div class="layer next" id="l2">
+        <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop')"></div>
+        <div class="max-w-6xl px-8 w-full">
+            <h2 class="text-5xl font-bold mb-16 text-center purple-glow uppercase">Rules of the Trial</h2>
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="glass-card p-10 border-t-2 border-purple-500">
+                    <h3 class="text-2xl font-bold mb-4 text-purple-300">VIRTUE</h3>
+                    <p class="text-gray-400 text-sm">Every line must be original. Plagiarism is exile from the Kingdom.</p>
+                </div>
+                <div class="glass-card p-10 border-t-2 border-purple-500">
+                    <h3 class="text-2xl font-bold mb-4 text-purple-300">FLIGHT</h3>
+                    <p class="text-gray-400 text-sm">Optimization is key. Your creation must run with the speed of a panther.</p>
+                </div>
+                <div class="glass-card p-10 border-t-2 border-purple-500">
+                    <h3 class="text-2xl font-bold mb-4 text-purple-300">DOMINANCE</h3>
+                    <p class="text-gray-400 text-sm">The Top 5 will be curated and displayed to the global council on LinkedIn.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layer next" id="l3">
+        <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop')"></div>
+        <div class="max-w-4xl px-8 text-center">
+            <div class="glass-card p-16 relative overflow-hidden">
+                <div class="absolute inset-0 bg-purple-900/10 pointer-events-none"></div>
+                <h2 class="text-6xl font-black mb-8 purple-glow uppercase">Finally You <br/> Found Me</h2>
+                <p class="text-gray-300 text-lg font-light leading-loose max-w-2xl mx-auto">
+                    The border has been crossed. You have entered the inner sanctum of elite developers. We aren't just a collective; we are a legacy. If you are here, you have the drive. Now, prove you have the talent.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="layer next" id="l4">
+        <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop'); opacity: 0.1;"></div>
+        <div class="max-w-4xl w-full px-8 text-center">
+            <h2 class="text-5xl font-bold mb-10 uppercase text-white tracking-[0.3em]">Accessing <span class="text-purple-500">Database</span></h2>
+            <div class="glass-card p-12">
+                <div class="text-7xl font-mono mb-10 text-purple-400 purple-glow" id="timer">30:00:00:00</div>
+                <p class="mb-12 text-gray-500 uppercase tracking-widest text-xs">Awaiting Master Signature...</p>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSde0h46nq3CzZEGraKlV_8vHhBRKvHowGP1R8_qXUENBJWw3Q/viewform?usp=publish-editor" 
+                   class="vibranium-btn inline-block px-20 py-6 text-white font-black uppercase tracking-widest text-xl shadow-[0_0_50px_rgba(126,34,206,0.4)]">
+                    Register Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="layer next" id="l5">
+        <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1974&auto=format&fit=crop'); filter: brightness(0.2);"></div>
+        <div class="text-center px-6">
+            <h2 class="text-6xl md:text-9xl font-black mb-12 purple-glow uppercase tracking-tighter">LEAD.</h2>
+            <p class="text-3xl text-purple-200 italic mb-10">"Just because something works, doesn't mean it cannot be improved."</p>
+            <p class="max-w-3xl mx-auto text-gray-400 text-xl font-light leading-relaxed">
+                The world is full of users. We need builders. For the next 30 days, silence the noise and focus on the forge. Build something that will make the ancestors proud.
+            </p>
+            <button onclick="jumpTo(0)" class="mt-16 text-purple-500 border-b-2 border-purple-500 pb-2 font-bold uppercase tracking-widest hover:text-white transition-all">Back to Throne</button>
+        </div>
+    </div>
+
+    <script>
+        let currentLayer = 0;
+        const totalLayers = 6;
+        const progress = document.getElementById('progress');
+        const dots = document.querySelectorAll('.dot');
+
+        function updateLayers() {
+            for (let i = 0; i < totalLayers; i++) {
+                const layer = document.getElementById(`l${i}`);
+                layer.classList.remove('active', 'prev', 'next');
+                dots[i].classList.remove('active');
+                
+                if (i === currentLayer) {
+                    layer.classList.add('active');
+                    dots[i].classList.add('active');
+                } else if (i < currentLayer) {
+                    layer.classList.add('prev');
+                } else {
+                    layer.classList.add('next');
+                }
+            }
+            progress.style.width = `${((currentLayer + 1) / totalLayers) * 100}%`;
+        }
+
+        function nextLayer() { if (currentLayer < totalLayers - 1) { currentLayer++; updateLayers(); } }
+        function prevLayer() { if (currentLayer > 0) { currentLayer--; updateLayers(); } }
+        function jumpTo(index) { currentLayer = index; updateLayers(); }
+
+        // Master Navigation Logic
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === ' ') nextLayer();
+            if (e.key === 'ArrowUp') prevLayer();
+        });
+
+        let lastWheel = 0;
+        window.addEventListener('wheel', (e) => {
+            const now = Date.now();
+            if (now - lastWheel < 1200) return; 
+            if (e.deltaY > 0) nextLayer();
+            else prevLayer();
+            lastWheel = now;
+        });
+
+        // 30-Day Vibranium Timer
+        const targetDate = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('timer').innerHTML = `${d}D : ${h}H : ${m}M : ${s}S`;
+        }, 1000);
+
+    </script>
+</body>
+</html>
